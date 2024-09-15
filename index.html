@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Water Footprint Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For graphs -->
+    <link rel="stylesheet" href="foodprint2.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HEADER SECTION -->
+    <header>
+        <div class="header-container">
+            <!-- Logo and Branding -->
+            <div id="logo">
+                <a href="#">CyberSplash</a>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Knowledge</a></li>
+                    <li><a href="#">Contribution</a></li>
+                    <li><a href="#">Quiz</a></li>
+                    <li><a href="#">E-commerce</a></li>
+                    <li><a href="#">Events</a></li>
+
+                    <!-- Dropdown for Calculators -->
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Calculator <i class="fa fa-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a href="#">Water Usage Calculator</a>
+                            <a href="#">Water Footprint Calculator</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Profile Icon for User Details -->
+            <div class="profile-icon" onclick="fetchUserDetails()">
+                <i class="fa fa-user-circle"></i>
+            </div>
+        </div>
+    </header>
+<!-- main -->
+<div class="container">
+    <header>
+        <h1>Advanced Water Footprint Calculator</h1>
+        <p>Calculate your water usage and find ways to reduce your water footprint.</p>
+    </header>
+    <main>
+        <section class="calculator">
+            <h2>Calculate Your Water Footprint</h2>
+            <form id="footprint-form">
+                <!-- Household Size -->
+                <div class="form-group">
+                    <label for="householdSize">Household Size:</label>
+                    <input type="number" id="householdSize" placeholder="Number of people" required>
+                </div>
+                <!-- Diet Type -->
+                <div class="form-group">
+                    <label for="diet">Diet Type:</label>
+                    <select id="diet" required>
+                        <option value="" disabled selected>Select your diet</option>
+                        <option value="0.7">Vegetarian</option>
+                        <option value="1.0">Balanced</option>
+                        <option value="1.5">Meat-heavy</option>
+                    </select>
+                </div>
+                <!-- Appliance Usage -->
+                <div class="form-group">
+                    <label for="washingMachine">Washing Machine Usage (loads/week):</label>
+                    <input type="number" id="washingMachine" placeholder="Loads per week" required>
+                </div>
+                <div class="form-group">
+                    <label for="showerTime">Average Shower Time (minutes/day):</label>
+                    <input type="number" id="showerTime" placeholder="Minutes per shower" required>
+                </div>
+                <div class="form-group">
+                    <label for="toiletFlushes">Toilet Flushes (times/day):</label>
+                    <input type="number" id="toiletFlushes" placeholder="Flushes per day" required>
+                </div>
+                <button type="submit">Calculate</button>
+            </form>
+            <div id="result" class="result">
+                <h3>Your Water Footprint</h3>
+                <p id="footprintResult">Fill in the form above to calculate your water footprint.</p>
+                <canvas id="waterChart" width="400" height="200"></canvas> <!-- Graph -->
+            </div>
+
+            <!-- Water-Saving Tips -->
+            <div id="tips" class="tips">
+                <h3>Water-Saving Tips</h3>
+                <p id="waterTips">Your personalized water-saving tips will appear here.</p>
+            </div>
+
+            <!-- Comparative Data -->
+            <div id="comparison" class="comparison">
+                <h3>Comparison with Global Average</h3>
+                <p id="comparisonResult">Your usage will be compared with global and national averages.</p>
+            </div>
+
+            <!-- Previous Calculations (Local Storage) -->
+            <div id="previousCalculations" class="history">
+                <h3>Your Previous Calculations</h3>
+                <ul id="historyList">No previous calculations found.</ul>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Water Conservation Initiative</p>
+    </footer>
+</div>
+<!-- <script>
+</script> -->
+    <!-- FOOTER SECTION -->
+    <footer>
+        <div class="footer-container">
+            <!-- Footer Links Section -->
+            <div class="footer-column">
+                <h3>About CyberSplash</h3>
+                <a href="#">Our Mission</a>
+                <a href="#">Sustainability Goals</a>
+                <a href="#">Careers</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Customer Support</h3>
+                <a href="#">FAQs</a>
+                <a href="#">Help Center</a>
+                <a href="#">Shipping & Returns</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <a href="#">Contact Form</a>
+                <a href="#">Phone Support</a>
+                <a href="#">Email Support</a>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Section -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 CyberSplash. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript File -->
+    <script>document.getElementById('footprint-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+    
+        // Get input values
+        const householdSize = parseFloat(document.getElementById('householdSize').value);
+        const dietMultiplier = parseFloat(document.getElementById('diet').value);
+        const washingMachineLoads = parseFloat(document.getElementById('washingMachine').value);
+        const showerTime = parseFloat(document.getElementById('showerTime').value);
+        const toiletFlushes = parseFloat(document.getElementById('toiletFlushes').value);
+    
+        // Constants for water consumption
+        const waterPerWashingLoad = 90; // Liters per load
+        const waterPerShowerMinute = 10; // Liters per minute of shower
+        const waterPerToiletFlush = 9;   // Liters per flush
+    
+        // Calculate individual water usage components
+        const dietWaterUse = householdSize * 1000 * dietMultiplier; // Daily water use due to diet
+        const washingMachineWaterUse = washingMachineLoads * waterPerWashingLoad / 7; // Weekly washing machine use
+        const showerWaterUse = showerTime * waterPerShowerMinute * householdSize; // Daily shower use
+        const toiletWaterUse = toiletFlushes * waterPerToiletFlush * householdSize; // Daily toilet flushes
+    
+        // Total Water Footprint
+        const totalWaterFootprint = (dietWaterUse + washingMachineWaterUse + showerWaterUse + toiletWaterUse).toFixed(2);
+    
+        // Display result
+        document.getElementById('footprintResult').innerHTML = `
+            Your estimated daily water footprint is <strong>${totalWaterFootprint} liters</strong>.
+        `;
+    
+        // Data for chart
+        const data = {
+            labels: ['Diet', 'Washing Machine', 'Shower', 'Toilet'],
+            datasets: [{
+                label: 'Water Usage (Liters)',
+                data: [dietWaterUse, washingMachineWaterUse, showerWaterUse, toiletWaterUse],
+                backgroundColor: ['#74b9ff', '#81ecec', '#00cec9', '#0984e3'],
+                borderColor: '#0984e3',
+                borderWidth: 1
+            }]
+        };
+    
+        // Create chart
+        const ctx = document.getElementById('waterChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    
+        // Water-saving tips
+        const waterTips = [];
+        if (showerTime > 10) {
+            waterTips.push("Reduce shower time to save water.");
+        }
+        if (toiletFlushes > 5) {
+            waterTips.push("Consider installing a low-flush toilet system.");
+        }
+        if (washingMachineLoads > 3) {
+            waterTips.push("Reduce washing machine loads or switch to an efficient model.");
+        }
+    
+        document.getElementById('waterTips').innerHTML = waterTips.length > 0 ? waterTips.join('<br>') : "Your water usage is already efficient!";
+    
+        // Comparison with global average (global avg: 5000 liters/day)
+        const globalAvg = 5000;
+        const comparisonResult = totalWaterFootprint > globalAvg ? "You use more water than the global average!" : "You are using less water than the global average!";
+        document.getElementById('comparisonResult').innerText = comparisonResult;
+    
+        // Save to local storage
+        saveCalculation(totalWaterFootprint);
+    });
+    
+    // Save the calculation to local storage
+    function saveCalculation(footprint) {
+        let history = JSON.parse(localStorage.getItem('waterFootprintHistory')) || [];
+        history.push({ date: new Date().toLocaleString(), footprint });
+        localStorage.setItem('waterFootprintHistory', JSON.stringify(history));
+    
+        displayHistory();
+    }
+    
+    // Display calculation history
+    function displayHistory() {
+        const history = JSON.parse(localStorage.getItem('waterFootprintHistory')) || [];
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '';
+    
+        history.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${item.date}: ${item.footprint} liters`;
+            historyList.appendChild(listItem);
+        });
+    }
+    
+    // Display history on page load
+    displayHistory();</script>
+</body>
+</html>
